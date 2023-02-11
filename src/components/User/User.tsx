@@ -9,7 +9,7 @@ interface ListElementProps {
    partOfUsers: UserType[];
 }
 
-const User: React.FC<ListElementProps> = ({ user, partOfUsers }) => {
+const User: React.FC<ListElementProps> = React.memo(({ user, partOfUsers }) => {
    let firstPart: boolean = partOfUsers.length === 20;
    let onePart: number = 20;
 
@@ -29,6 +29,6 @@ const User: React.FC<ListElementProps> = ({ user, partOfUsers }) => {
          <p>surname: {user.surname}</p>
       </section>
    );
-};
+});
 
 export default User;
