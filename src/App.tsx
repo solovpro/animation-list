@@ -110,7 +110,7 @@ const App: React.FC = () => {
          surname: 'Doe',
       },
    ]);
-   // Изначально, учитывая отступы и то, что пару блоков уже на экране у нас высота partOfUsers === 2350
+   // Изначально, учитывая отступы и то, что пару блоков уже на экране у нас высота partOfUsers === 2250
    const [partOfUsersHeight, setPartOfUsersHeight] = useState<number>(2250);
    const [scroll, setScroll] = useState<number>(0);
 
