@@ -9,28 +9,21 @@
 
 <div align="start">
 
-### App.tsx (строки 149-151)
+### User.tsx (строки 15-23)
 ```bash
-После обновления страницы scroll присваивается window.scrollY,
-Поэтому сразу после присвоения обнуляем scroll
+Анимация появления блока и, с помощью функции onVisibilityChange,
+отслеживаем, когда появится предпоследний user в зоне видимости,
+после появления вызываем функцию получения новых пользователей
 
-useEffect(() => {
-  setTimeout(() => window.scroll(0, 0), 100);
-}, []);
-```
-
-### App.tsx (строки 153-156)
-```bash
-Я искал библиотеки React, чтобы не взаимодействовать 
-с DOM напрямую,но не нашел ни одной подходящей,
-чтобы много времени не тратить, решил сделать так,
-просто и незамудренно, хотя если есть подходящая
-Библиотека, то лучше использовать ее
-
-useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.scrollTo(0, 0);
-}, []);
+<Fade
+    onVisibilityChange={(inView: boolean) => {
+      const isVisiblePenultimate = user.id % 20 === 19 && inView;
+       if (isVisiblePenultimate) {
+          getNewPartOfUsers();
+      }
+    }}
+    triggerOnce
+>
 ```
 
 </div>
