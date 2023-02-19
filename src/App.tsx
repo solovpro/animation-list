@@ -8,124 +8,14 @@ import s from './App.module.scss';
 
 const App: React.FC = () => {
    const [users, setUsers] = useState<UserType[]>([]);
-   const [partOfUsers, setPartOfUsers] = useState<UserType[]>([
-      {
-         id: 1,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 2,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 3,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 4,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 5,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 6,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 7,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 8,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 9,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 10,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 11,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 12,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 13,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 14,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 15,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 16,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 17,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 18,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 19,
-         name: 'John',
-         surname: 'Doe',
-      },
-      {
-         id: 20,
-         name: 'John',
-         surname: 'Doe',
-      },
-   ]);
-   // Изначально, учитывая отступы и то, что пару блоков уже на экране у нас высота partOfUsers === 2250
-   const [partOfUsersHeight, setPartOfUsersHeight] = useState<number>(2250);
-   const [scroll, setScroll] = useState<number>(0);
+   const [partOfUsers, setPartOfUsers] = useState<UserType[]>([]);
+   const [onePartLength, setOnePartLength] = useState<number>(20);
+   const [fullUsers] = useState<number>(100);
 
    const getNewPartOfUsers = () => {
-      const fullUsers: number = 100;
-      if (partOfUsers.length !== fullUsers && users.length) {
-         const onePartLength: number = partOfUsers.length + 20;
+      if (partOfUsers.length !== fullUsers) {
          setPartOfUsers(users.slice(0, onePartLength));
-         setPartOfUsersHeight(value => value + 3000); // Добавляем высоту новых 20 блоков
-      }
-   };
-
-   const checkScrollHeight = () => {
-      if (scroll > partOfUsersHeight) {
-         getNewPartOfUsers();
+         setOnePartLength(value => value + 20);
       }
    };
 
@@ -134,40 +24,29 @@ const App: React.FC = () => {
          .get('https://63e4d5cfc04baebbcdad16d8.mockapi.io/users')
          .then(response => {
             setUsers(response.data);
+            setPartOfUsers(response.data.slice(0, onePartLength));
+            setOnePartLength(40); // Присваиваем длину 2-ой пачки 20-ти элементов
          })
          .catch(error => console.log(error));
-   };
-
-   const handleScroll = () => {
-      setScroll(window.scrollY);
    };
 
    useEffect(() => {
       getUsers();
    }, []);
 
-   useEffect(() => {
-      setTimeout(() => window.scroll(0, 0), 100);
-   }, []);
-
-   useEffect(() => {
-      window.addEventListener('scroll', handleScroll);
-      return () => window.scrollTo(0, 0);
-   }, []);
-
-   useEffect(() => {
-      checkScrollHeight();
-   }, [scroll]);
-
    return (
       <main className={s.app}>
-         <ul>
-            {partOfUsers.map((user: UserType) => (
-               <li key={user.id}>
-                  <User partOfUsers={partOfUsers} user={user} />
-               </li>
-            ))}
-         </ul>
+         {users ? (
+            <ul>
+               {partOfUsers.map((user: UserType) => (
+                  <li key={user.id}>
+                     <User getNewPartOfUsers={getNewPartOfUsers} user={user} />
+                  </li>
+               ))}
+            </ul>
+         ) : (
+            <div>loading...</div>
+         )}
       </main>
    );
 };
