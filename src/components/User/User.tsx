@@ -10,7 +10,7 @@ interface ListElementProps {
    getNewPartOfUsers: () => void;
 }
 
-const User: React.FC<ListElementProps> = React.memo(({ user, getNewPartOfUsers }) => (
+const User: React.FC<ListElementProps> = ({ user, getNewPartOfUsers }) => (
    <Slide duration={1500} triggerOnce direction={'up'}>
       <Fade
          onVisibilityChange={(inView: boolean) => {
@@ -28,6 +28,6 @@ const User: React.FC<ListElementProps> = React.memo(({ user, getNewPartOfUsers }
          </section>
       </Fade>
    </Slide>
-));
+);
 
 export default User;
