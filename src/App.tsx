@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import User from './components/User/User';
+import UsersList from './components/UsersList/UsersList';
 import UserType from './types/types';
 
 import s from './App.module.scss';
@@ -10,9 +10,10 @@ const App: React.FC = () => {
    const [users, setUsers] = useState<UserType[]>([]);
    const [partOfUsers, setPartOfUsers] = useState<UserType[]>([]);
    const [onePartLength, setOnePartLength] = useState<number>(20);
-   const [fullUsers] = useState<number>(100);
+   const [errorRequest, setErrorRequest] = useState<boolean>(false);
 
    const getNewPartOfUsers = () => {
+      const fullUsers: number = 100;
       if (partOfUsers.length !== fullUsers) {
          setPartOfUsers(users.slice(0, onePartLength));
          setOnePartLength(value => value + 20);
@@ -26,8 +27,13 @@ const App: React.FC = () => {
             setUsers(response.data);
             setPartOfUsers(response.data.slice(0, onePartLength));
             setOnePartLength(40); // Присваиваем длину 2-ой пачки 20-ти элементов
+            if (errorRequest) {
+               setErrorRequest(false);
+            }
          })
-         .catch(error => console.log(error));
+         .catch(() => {
+            setErrorRequest(true);
+         });
    };
 
    useEffect(() => {
@@ -36,16 +42,10 @@ const App: React.FC = () => {
 
    return (
       <main className={s.app}>
-         {users ? (
-            <ul>
-               {partOfUsers.map((user: UserType) => (
-                  <li key={user.id}>
-                     <User getNewPartOfUsers={getNewPartOfUsers} user={user} />
-                  </li>
-               ))}
-            </ul>
+         {!errorRequest ? (
+            <UsersList users={users} partOfUsers={partOfUsers} getNewPartOfUsers={getNewPartOfUsers} />
          ) : (
-            <div>loading...</div>
+            <div>Ошибка получения данных</div>
          )}
       </main>
    );
