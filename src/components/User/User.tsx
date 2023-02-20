@@ -5,12 +5,12 @@ import UserType from '../../types/types';
 
 import s from './User.module.scss';
 
-interface ListElementProps {
+interface UserProps {
    user: UserType;
    getNewPartOfUsers: () => void;
 }
 
-const User: React.FC<ListElementProps> = ({ user, getNewPartOfUsers }) => (
+const User: React.FC<UserProps> = ({ user, getNewPartOfUsers }) => (
    <Slide duration={1500} triggerOnce direction={'up'}>
       <Fade
          onVisibilityChange={(inView: boolean) => {
